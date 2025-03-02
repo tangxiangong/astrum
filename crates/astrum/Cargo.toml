@@ -1,0 +1,11 @@
+[package]
+name = "astrum"
+authors.workspace = true
+version.workspace = true
+edition.workspace = true
+description = "A library for finite element analysis."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/tangxiangong/astrum"
+readme = "../../README.md"
+
+[dependencies]
