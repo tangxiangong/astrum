@@ -1,0 +1,16 @@
+[target.'cfg(target_os = "linux")']
+rustflags = ["-C", "link-args=-Wl,-rpath,./gmsh"]
+
+[target.'cfg(target_os = "macos")']
+rustflags = [
+    "-C",
+    "link-args=-Wl,-rpath,@loader_path/lib",
+    "-C",
+    "link-args=-Wl,-rpath,@executable_path/lib",
+]
+
+[target.'cfg(target_os = "windows")']
+rustflags = ["-C", "link-args=/LIBPATH:./lib"]
+
+[env]
+DYLD_LIBRARY_PATH = "lib"

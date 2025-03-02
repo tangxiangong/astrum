@@ -8,3 +8,12 @@ version = "0.1.0"
 edition = "2024"
 
 [workspace.dependencies]
+# linear algebra
+nalgebra = "0.33.2"
+nalgebra-sparse = "0.10.0"
+nalgebra-lapack = {version = "0.25.0", features = ["accelerate"]}
+# c bindings
+libc = "0.2.169"
+# common
+thiserror = "2.0.11"
+

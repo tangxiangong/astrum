@@ -5,3 +5,8 @@ version.workspace = true
 edition.workspace = true
 
 [dependencies]
+libc = {workspace = true}
+thiserror = {workspace = true}
+
+[build-dependencies]
+bindgen = "0.71.1"
