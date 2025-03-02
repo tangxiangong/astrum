@@ -5,8 +5,8 @@ pub use error::*;
 
 pub mod logger;
 
+use crate::{GError, GResult, bindings::*};
 use std::ffi::*;
-use crate::{bindings::*, GResult, GError};
 
 /// A model entity in the Gmsh API is represented by two integers: its
 /// dimension (dim = 0, 1, 2 or 3) and its tag (its unique, strictly positive
@@ -62,21 +62,30 @@ impl Drop for APIAllocatedArray {
 /// ```
 pub fn initialize(argv: Vec<String>, read_config_files: bool, run: bool) -> GResult<()> {
     let c_argc = argv.len() as c_int;
-    let c_argv= if c_argc == 0 {
+    let c_argv = if c_argc == 0 {
         std::ptr::null_mut()
     } else {
-    // 使用 CString 安全的将 Rust String 转换为 C 字符数组
-    let cstrings = argv.into_iter()
-        .map(|s| CString::new(s)
-        .map_err(|e| e.into()))
-        .collect::<Result<Vec<_>, GError>>()?;
-    let mut cchars = cstrings.iter().map(|s| s.as_ptr() as *mut c_char).collect::<Vec<_>>();
-    cchars.push(std::ptr::null_mut());
-    cchars.as_mut_ptr()
-};
+        // 使用 CString 安全的将 Rust String 转换为 C 字符数组
+        let cstrings = argv
+            .into_iter()
+            .map(|s| CString::new(s).map_err(|e| e.into()))
+            .collect::<Result<Vec<_>, GError>>()?;
+        let mut cchars = cstrings
+            .iter()
+            .map(|s| s.as_ptr() as *mut c_char)
+            .collect::<Vec<_>>();
+        cchars.push(std::ptr::null_mut());
+        cchars.as_mut_ptr()
+    };
     let mut ierr = 0;
     unsafe {
-        gmshInitialize(c_argc, c_argv, read_config_files as c_int, run as c_int, &mut ierr);
+        gmshInitialize(
+            c_argc,
+            c_argv,
+            read_config_files as c_int,
+            run as c_int,
+            &mut ierr,
+        );
         if ierr != 0 {
             return Err(GError::from_log());
         }
@@ -85,7 +94,7 @@ pub fn initialize(argv: Vec<String>, read_config_files: bool, run: bool) -> GRes
 }
 
 /// API: gmsh::isInitialized
-/// 
+///
 /// Return 1 if the Gmsh API is initialized, and 0 if not.
 /// ```c++
 /// GMSH_API int isInitialized();
