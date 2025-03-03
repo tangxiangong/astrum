@@ -20,7 +20,7 @@ pub struct UnstructuredGridTopology<const CDIM: usize, const PDIM: usize> {
 }
 
 impl<const CDIM: usize, const PDIM: usize> UnstructuredGridTopology<CDIM, PDIM> {
-    pub fn from_grid<T: Float + Scalar + Debug, G: Grid>(grid: &G) -> Self {
+    pub fn from_grid<T: Float + Scalar + Debug, G: Grid>(_grid: &G) -> Self {
         // 实现省略
         Self {}
     }
